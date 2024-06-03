@@ -42,6 +42,7 @@ admin = IntVar()
 adminScale = Scale(root, from_=1, to=2, variable = admin, width = 10, length=50, orient=VERTICAL,bd=0)
 
 #IMAGES
+
 suitcase = PhotoImage(file='images/suitcase.png')
 suitcaseLabel = Label(product1Frame,image=suitcase,bd=0)
 
