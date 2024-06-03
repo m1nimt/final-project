@@ -39,10 +39,9 @@ discountLabel = Label(root,text='COUPON',font=('Gill Sans',15),background='#FFFF
 
 #SCALES
 admin = IntVar()
-adminScale = Scale(root, from_=1, to=2, variable = admin, width = 10, length=50, orient=VERTICAL,bd=0)
+adminScale = Scale(root, from_=1, to=2, variable = admin, width = 20, length=50, orient=VERTICAL,bd=0,bg='#FFFFFF',fg='#000000',label='Admin Mode',font=('Gill Sans',10))
 
 #IMAGES
-
 suitcase = PhotoImage(file='images/suitcase.png')
 suitcaseLabel = Label(product1Frame,image=suitcase,bd=0)
 
@@ -90,6 +89,6 @@ discountLabel.grid(row=6,column=3)
 codeEntry.grid(row=7,column=3,sticky=E,ipady=3)
 applyButton.grid(row=7,column=4,sticky=W)
 
-adminScale.grid(row=7,column=1)
+adminScale.grid(row=7,column=1,sticky=W)
 
 root.mainloop()
