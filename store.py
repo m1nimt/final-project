@@ -4,6 +4,14 @@ from tkinter import *
 root = Tk()
 root.config(bg="#FFFFFF")
 
+#functions
+def quantity_1():
+    quantity = 
+
+def quantity_2():
+    quantity = spin2.get()
+    price = price2.get()
+    price2.set(quantity*price)
 
 #FRAMES
 product1Frame=LabelFrame(root,text='Suitcase - Blue',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
@@ -28,7 +36,8 @@ quantityLabel = Label(root,text='QUANTITY',font=('Gill Sans',10),background='#FF
 totalLabel = Label(root,text='TOTAL',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
 
 price1 = StringVar()
-price1.set('$100')
+price1_value = IntVar()
+price1.set(f'${price1_value.get()}')
 price1Label = Label(product1Frame,textvariable=price1,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000')
 
 price2 = StringVar()
@@ -51,7 +60,7 @@ tableLabel = Label(product2Frame,image=table,bd=0)
 #SPINBOX
 spin1 = IntVar()
 spin1.set(1)
-prod1spin = Spinbox(product1Frame, width=3, textvariable=spin1, from_=1, to=999,background='#FFFFFF',highlightbackground='#FFFFFF',foreground='#000000')
+prod1spin = Spinbox(product1Frame, width=3, textvariable=spin1, from_=1, to=999,background='#FFFFFF',highlightbackground='#FFFFFF',foreground='#000000',command=quantity_1)
 
 spin2 = IntVar()
 spin2.set(1)
