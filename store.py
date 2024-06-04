@@ -1,17 +1,20 @@
 from tkinter import *
-
+import random
 
 root = Tk()
 root.config(bg="#FFFFFF")
 
 #functions
 def quantity_1():
-    quantity = 
+    price = price1_value.get()
+    quantity = spin1.get()
+    price1.set(f'${price*quantity}')
 
 def quantity_2():
+    price = price2_value.get()
     quantity = spin2.get()
-    price = price2.get()
-    price2.set(quantity*price)
+    price2.set(f'${price*quantity}')
+
 
 #FRAMES
 product1Frame=LabelFrame(root,text='Suitcase - Blue',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
@@ -37,14 +40,23 @@ totalLabel = Label(root,text='TOTAL',font=('Gill Sans',10),background='#FFFFFF',
 
 price1 = StringVar()
 price1_value = IntVar()
+price1_value.set(random.randint(20,120))
 price1.set(f'${price1_value.get()}')
-price1Label = Label(product1Frame,textvariable=price1,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000')
+price1Label = Label(product1Frame,textvariable=price1,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000',width=4)
 
 price2 = StringVar()
-price2.set('$100')
-price2Label = Label(product2Frame,textvariable=price1,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000')
+price2_value = IntVar()
+price2_value.set(random.randint(20,120))
+price2.set(f'${price2_value.get()}')
+price2Label = Label(product2Frame,textvariable=price2,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000',width=4)
 
 discountLabel = Label(root,text='COUPON',font=('Gill Sans',15),background='#FFFFFF',foreground='#8f8f8f')
+
+out_of1Text = StringVar()
+out_of1Label=Label(product1Frame,textvariable=out_of1Text,font=('Gill Sans',15),background='#FFFFFF',foreground='#fc0000')
+
+out_of2Text = StringVar()
+out_of1Label=Label(product2Frame,textvariable=out_of2Text,font=('Gill Sans',15),background='#FFFFFF',foreground='#fc0000')
 
 #SCALES
 admin = IntVar()
@@ -60,11 +72,11 @@ tableLabel = Label(product2Frame,image=table,bd=0)
 #SPINBOX
 spin1 = IntVar()
 spin1.set(1)
-prod1spin = Spinbox(product1Frame, width=3, textvariable=spin1, from_=1, to=999,background='#FFFFFF',highlightbackground='#FFFFFF',foreground='#000000',command=quantity_1)
+prod1spin = Spinbox(product1Frame, width=3, textvariable=spin1, from_=1, to=random.randint(2,30),background='#FFFFFF',highlightbackground='#FFFFFF',foreground='#000000',command=quantity_1)
 
 spin2 = IntVar()
 spin2.set(1)
-prod2spin = Spinbox(product2Frame, width=3, textvariable=spin2, from_=1, to=999,background='#FFFFFF',highlightbackground='#FFFFFF',foreground='#000000')
+prod2spin = Spinbox(product2Frame, width=3, textvariable=spin2, from_=1, to=random.randint(2,30),background='#FFFFFF',highlightbackground='#FFFFFF',foreground='#000000',command=quantity_2)
 
 #ENTRY
 code = StringVar()
