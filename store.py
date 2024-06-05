@@ -144,7 +144,7 @@ prod2spin = Spinbox(product2Frame, width=3, textvariable=spin2, from_=1, to=rand
 #ENTRY
 code = StringVar()
 code.set('Enter here')
-codeEntry=Entry(admin_off,textvariable=code,width=10,fg='#8f8f8f',bg='#FFFFFF',bd=30)
+codeEntry=Entry(admin_off,textvariable=code,width=10,fg='#8f8f8f',bg='#FFFFFF',bd=2)
 codeEntry.bind("<FocusIn>", remove_text)
 codeEntry.bind("<FocusOut>", add_text)
 
