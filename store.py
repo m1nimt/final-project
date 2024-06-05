@@ -2,23 +2,80 @@ from tkinter import *
 import random
 
 root = Tk()
-root.config(bg="#FFFFFF")
+
+admin_off=Frame(root)
+admin_off.config(bg="#FFFFFF")
 
 #functions
+def remove_text(ignore):
+    code.set('')
+    codeEntry.config(fg='#000000')
+
+def add_text(ignore):
+    codeEntry.config(fg='#8f8f8f')
+    code.set('Coupon here')
+    
+
+
 def quantity_1():
     price = price1_value.get()
     quantity = spin1.get()
     price1.set(f'${price*quantity}')
+    subtotalPrice.set(f'${(int(price1.get().replace('$',''))) + (int(price2.get().replace('$',''))+.0)}')
+
 
 def quantity_2():
     price = price2_value.get()
     quantity = spin2.get()
     price2.set(f'${price*quantity}')
+    subtotalPrice.set(f'${(int(price1.get().replace('$',''))) + (int(price2.get().replace('$',''))+.0)}')
 
 
+
+def coupon_apply():
+    global valid_coupons,already_applied
+    #valid coupons is a list of coupons
+    user_code = code.get()
+    #users inputed coupon
+    if user_code ==' ' or user_code == '' or user_code == 'Enter here':
+        already_appliedLabel.grid_remove()
+        bad_couponLabel.grid_remove()
+        
+    elif user_code not in valid_coupons:
+        already_applied = user_code
+        already_appliedLabel.grid_remove()
+        bad_couponLabel.grid()
+        
+
+    elif user_code == already_applied:
+        already_applied = user_code
+        bad_couponLabel.grid_remove()
+        already_appliedLabel.grid()
+
+    else:
+        already_appliedLabel.grid_remove()
+        already_applied = user_code
+        bad_couponLabel.grid_remove()
+
+        value_of_coupon = ''
+            
+        for letter in user_code:
+            if letter.isnumeric()==True:
+                value_of_coupon+=letter
+
+        value_of_coupon = int(value_of_coupon)
+        subtotalPriceLabel.config(foreground='#ff0000')
+
+
+
+def strike(text):
+    result = ''
+    for c in text:
+        result = result + c + '\u0336'
+    return result
 #FRAMES
-product1Frame=LabelFrame(root,text='Suitcase - Blue',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
-product2Frame=LabelFrame(root,text='Lorem ipsum',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
+product1Frame=LabelFrame(admin_off,text='Suitcase - Blue',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
+product2Frame=LabelFrame(admin_off,text='Lorem ipsum',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
 
 #WHITESPACE
 whitespace1=Label(product1Frame,bg='#FFFFFF')
@@ -28,15 +85,15 @@ whitespace4=Label(product2Frame,bg='#FFFFFF')
 
 
 #BUTTONS
-atibaStoreButton = Button(root,text='Atiba Store',font=('Gill Sans',20),bg="#FFFFFF",activebackground='#FFFFFF',relief=FLAT)
+atibaStoreButton = Button(admin_off,text='Atiba Store',font=('Gill Sans',20),bg="#FFFFFF",activebackground='#FFFFFF',relief=FLAT)
 
-applyButton = Button(root,text='Apply',font=('Gill Sans',20),bg="#e39700",relief=RAISED)
+applyButton = Button(admin_off,text='Apply',font=('Gill Sans',20),bg="#e39700",relief=RAISED,command=coupon_apply)
 
 #LABELS
-cartLabel = Label(root,text='Your Cart',font=('Gill Sans',30),background='#FFFFFF',foreground='#000000')
+cartLabel = Label(admin_off,text='Your Cart',font=('Gill Sans',30),background='#FFFFFF',foreground='#000000')
 
-quantityLabel = Label(root,text='QUANTITY',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
-totalLabel = Label(root,text='TOTAL',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
+quantityLabel = Label(admin_off,text='QUANTITY',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
+totalLabel = Label(admin_off,text='TOTAL',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
 
 price1 = StringVar()
 price1_value = IntVar()
@@ -50,7 +107,7 @@ price2_value.set(random.randint(20,120))
 price2.set(f'${price2_value.get()}')
 price2Label = Label(product2Frame,textvariable=price2,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000',width=4)
 
-discountLabel = Label(root,text='COUPON',font=('Gill Sans',15),background='#FFFFFF',foreground='#8f8f8f')
+discountLabel = Label(admin_off,text='COUPON',font=('Gill Sans',15),background='#FFFFFF',foreground='#8f8f8f')
 
 out_of1Text = StringVar()
 out_of1Label=Label(product1Frame,textvariable=out_of1Text,font=('Gill Sans',15),background='#FFFFFF',foreground='#fc0000')
@@ -58,9 +115,18 @@ out_of1Label=Label(product1Frame,textvariable=out_of1Text,font=('Gill Sans',15),
 out_of2Text = StringVar()
 out_of1Label=Label(product2Frame,textvariable=out_of2Text,font=('Gill Sans',15),background='#FFFFFF',foreground='#fc0000')
 
+subtotalLabel = Label(admin_off,text='SUBTOTAL',font=('Gill Sans',15),background='#FFFFFF',foreground='#000000')
+
+subtotalPrice = StringVar()
+subtotalPrice.set(f'${(int(price1.get().replace('$',''))) + (int(price2.get().replace('$',''))+.0)}')
+subtotalPriceLabel=Label(admin_off,textvariable=subtotalPrice,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000')
+
+already_appliedLabel = Label(admin_off,text='You already entered this code!',font=('Gill Sans',10),background='#FFFFFF',foreground='#ff0000')
+bad_couponLabel = Label(admin_off,text="This code doesn't exist.",font=('Gill Sans',10),background='#FFFFFF',foreground='#ff0000')
+
 #SCALES
 admin = IntVar()
-adminScale = Scale(root, from_=1, to=2, variable = admin, width = 20, length=50, orient=VERTICAL,bd=0,bg='#FFFFFF',fg='#000000',label='Admin Mode',font=('Gill Sans',10))
+adminScale = Scale(admin_off, from_=1, to=2, variable = admin, width = 20, length=50, orient=VERTICAL,bd=0,bg='#FFFFFF',fg='#000000',label='Admin Mode',font=('Gill Sans',10))
 
 #IMAGES
 suitcase = PhotoImage(file='images/suitcase.png')
@@ -80,9 +146,19 @@ prod2spin = Spinbox(product2Frame, width=3, textvariable=spin2, from_=1, to=rand
 
 #ENTRY
 code = StringVar()
-codeEntry=Entry(root,textvariable=code,width=10,fg='#000000',bg='#FFFFFF',bd=0)
+code.set('Enter here')
+codeEntry=Entry(admin_off,textvariable=code,width=10,fg='#8f8f8f',bg='#FFFFFF',bd=0)
+codeEntry.bind("<FocusIn>", remove_text)
+codeEntry.bind("<FocusOut>", add_text)
+
+#COUPON LISTS
+valid_coupons = ['BONUS40']
+
+already_applied = ''
 
 #GRIDDING
+admin_off.grid()
+
 atibaStoreButton.grid(column=1,row=1)
 cartLabel.grid(column=2,row=2)
 quantityLabel.grid(column=3,row=3,sticky=W)
@@ -111,5 +187,14 @@ codeEntry.grid(row=7,column=3,sticky=E,ipady=3)
 applyButton.grid(row=7,column=4,sticky=W)
 
 adminScale.grid(row=7,column=1,sticky=W)
+
+subtotalLabel.grid(column=3,row=9)
+subtotalPriceLabel.grid(column=4,row=9)
+
+already_appliedLabel.grid(column=3,row=8,sticky=EW,columnspan=2)
+already_appliedLabel.grid_remove()
+
+bad_couponLabel.grid(column=3,row=8,columnspan=2,sticky=EW)
+bad_couponLabel.grid_remove()
 
 root.mainloop()
