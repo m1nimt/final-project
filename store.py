@@ -47,7 +47,7 @@ def coupon_apply():
         bad_couponLabel.grid()
         
 
-    elif user_code == already_applied:
+    elif user_code == already_applied or user_code in coupons_done:
         already_applied = user_code
         bad_couponLabel.grid_remove()
         already_appliedLabel.grid()
@@ -56,6 +56,8 @@ def coupon_apply():
         already_appliedLabel.grid_remove()
         already_applied = user_code
         bad_couponLabel.grid_remove()
+
+        coupons_done.append(user_code)
 
         value_of_coupon = ''
             
@@ -68,11 +70,6 @@ def coupon_apply():
 
 
 
-def strike(text):
-    result = ''
-    for c in text:
-        result = result + c + '\u0336'
-    return result
 #FRAMES
 product1Frame=LabelFrame(admin_off,text='Suitcase - Blue',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
 product2Frame=LabelFrame(admin_off,text='Lorem ipsum',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
@@ -87,7 +84,7 @@ whitespace4=Label(product2Frame,bg='#FFFFFF')
 #BUTTONS
 atibaStoreButton = Button(admin_off,text='Atiba Store',font=('Gill Sans',20),bg="#FFFFFF",activebackground='#FFFFFF',relief=FLAT)
 
-applyButton = Button(admin_off,text='Apply',font=('Gill Sans',20),bg="#e39700",relief=RAISED,command=coupon_apply)
+applyButton = Button(admin_off,text='Apply',font=('Gill Sans',20),bg="#e39700",activebackground='#8c5e00',relief=RAISED,command=coupon_apply)
 
 #LABELS
 cartLabel = Label(admin_off,text='Your Cart',font=('Gill Sans',30),background='#FFFFFF',foreground='#000000')
@@ -147,7 +144,7 @@ prod2spin = Spinbox(product2Frame, width=3, textvariable=spin2, from_=1, to=rand
 #ENTRY
 code = StringVar()
 code.set('Enter here')
-codeEntry=Entry(admin_off,textvariable=code,width=10,fg='#8f8f8f',bg='#FFFFFF',bd=0)
+codeEntry=Entry(admin_off,textvariable=code,width=10,fg='#8f8f8f',bg='#FFFFFF',bd=2)
 codeEntry.bind("<FocusIn>", remove_text)
 codeEntry.bind("<FocusOut>", add_text)
 
@@ -155,6 +152,8 @@ codeEntry.bind("<FocusOut>", add_text)
 valid_coupons = ['BONUS40']
 
 already_applied = ''
+
+coupons_done = []
 
 #GRIDDING
 admin_off.grid()
