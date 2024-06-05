@@ -28,9 +28,9 @@ whitespace4=Label(product2Frame,bg='#FFFFFF')
 
 
 #BUTTONS
-atibaStoreButton = Button(root,text='Atiba Store',font=('Gill Sans',20),bg="#e39700",activebackground='#FFFFFF',relief=FLAT)
+atibaStoreButton = Button(root,text='Atiba Store',font=('Gill Sans',20),bg="#FFFFFF",activebackground='#FFFFFF',relief=FLAT)
 
-applyButton = Button(root,text='Apply',font=('Gill Sans',20),bg="#FFFFFF",relief=RAISED)
+applyButton = Button(root,text='Apply',font=('Gill Sans',20),bg="#e39700",relief=RAISED)
 
 #LABELS
 cartLabel = Label(root,text='Your Cart',font=('Gill Sans',30),background='#FFFFFF',foreground='#000000')
