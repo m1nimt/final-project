@@ -16,7 +16,11 @@ def admin_mode_toggle(ignore):
     if admin.get() == 1:
        
         #label
-        no_number = Label(admin_on,text='You must include a number, this will be your coupon value. Numbers will be read left to right and can be anything above 0, and under 100.',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
+        no_number = Label(admin_on,text='You must include a number,\nthis will be your coupon value.\nNumbers will be read left to right and\ncan be anything above 0, and under 100.',font=('Gill Sans',10),background='#FFFFFF',foreground='#ff0000')
+
+        #frames
+        product1_configFrame = LabelFrame(admin_on,text='Product 1',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
+        product2_configFrame = LabelFrame(admin_on,text='Product 2',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
 
         #list
         coupon_list = StringVar()
@@ -39,11 +43,11 @@ def admin_mode_toggle(ignore):
         admin_off.grid_remove()
         admin_on.grid()
         adminScale2.grid(row=4,column=1)
-        coupon_listbox.grid(row=1,column=2,columnspan=2)
-        delete_allButton.grid(row=2,column=3)
-        delete_singleButton.grid(row=2,column=2)
-        new_codeEntry.grid(row=3,column=2,sitcky=E)
-        add_button.grid(row=3,column=3,sticky=W)
+        coupon_listbox.grid(row=1,column=2,columnspan=2,sticky=EW)
+        delete_allButton.grid(row=2,column=3,sticky=EW)
+        delete_singleButton.grid(row=2,column=2,sticky=EW)
+        new_codeEntry.grid(row=3,column=2,sticky=EW)
+        add_button.grid(row=3,column=3,sticky=EW)
     else:
         admin_on.grid_remove()
         admin_off.grid()
@@ -60,17 +64,22 @@ def admin_mode_toggle(ignore):
 
 ########################
 def add_coupon():
-    x = new_code.get()
+    global valid_coupons
+    coupon = new_code.get()
     numbers = '123456789'
     proper = False
 
     for i in numbers:
-      if i in x:
+      if i in coupon:
         proper = True
         break
     
     if proper == False:
         no_number.grid(row=4,column=2,columnspan=2)
+    else:
+        valid_coupons.append(coupon)
+        coupon_list.set(valid_coupons) # type: ignore
+
 
 
 def delete_all_coupons():
@@ -256,9 +265,6 @@ codeEntry.bind("<FocusOut>", add_text)
 #COUPON LISTS
 valid_coupons = [
     "15SUMMER", "40BONUS", "20WINTER", "25FALL", "10SPRING",
-    "WELCOME30", "50HOLIDAY", "VIP35", "45NEWYEAR", "20AUTUMN",
-    "60FLASHSALE", "5DISCOUNT", "55CLEARANCE", "25SPECIAL", "SAVE15",
-    "30GIFT", "40EXTRA", "50BLACKFRIDAY", "45CYBERMONDAY", "20NEWBIE"
 ]
 
 
