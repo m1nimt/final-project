@@ -25,8 +25,20 @@ def admin_mode_toggle(ignore):
         #list
         coupon_list = StringVar()
         coupon_list.set(valid_coupons) # type: ignore
-        coupon_listbox = Listbox(admin_on, listvariable=coupon_list,selectmode=SINGLE, font=('Gill Sans',15),bg='#FFFFFF',fg='#000000')
+        coupon_listbox = Listbox( admin_on, listvariable=coupon_list,selectmode=SINGLE, font=('Gill Sans',15),bg='#FFFFFF',fg='#000000')
         
+        #option menu
+        images = [
+            'Wallet','Speaker','Yoga Mat','Remote','Blender'
+        ]
+
+        current_image = StringVar()
+        current_image.set(images[image_choice1-1])
+        current_imageOptionMenu=OptionMenu(product1_configFrame,current_image,*images)
+
+        current_image2 = StringVar()
+        current_image2.set(images[image_choice2-1])
+        current_imageOptionMenu2=OptionMenu(product2_configFrame,current_image2,*images)
         #buttons
         delete_allButton = Button(admin_on,text='Delete All',font=('Gill Sans',10),bg="#FFFFFF",command=delete_all_coupons,bd=0,highlightthickness=0)
         delete_singleButton = Button(admin_on,text='Delete Single',font=('Gill Sans',10),bg="#FFFFFF",command=delete_single_coupon,bd=0,highlightthickness=0)
@@ -43,11 +55,17 @@ def admin_mode_toggle(ignore):
         admin_off.grid_remove()
         admin_on.grid()
         adminScale2.grid(row=4,column=1)
-        coupon_listbox.grid(row=1,column=2,columnspan=2,sticky=EW)
-        delete_allButton.grid(row=2,column=3,sticky=EW)
-        delete_singleButton.grid(row=2,column=2,sticky=EW)
-        new_codeEntry.grid(row=3,column=2,sticky=EW)
-        add_button.grid(row=3,column=3,sticky=EW)
+        coupon_listbox.grid(row=1,column=2,columnspan=2,rowspan=2,sticky=EW)
+        delete_allButton.grid(row=3,column=3,sticky=EW)
+        delete_singleButton.grid(row=3,column=2,sticky=EW)
+        new_codeEntry.grid(row=4,column=2,sticky=EW)
+        add_button.grid(row=4,column=3,sticky=EW)
+
+        product1_configFrame.grid(row=1,column=1,padx=10)
+        current_imageOptionMenu.grid(row=1,column=1,ipadx=40,ipady=10)
+
+        product2_configFrame.grid(row=2,column=1,padx=20)
+        current_imageOptionMenu2.grid(row=1,column=1,ipadx=40,ipady=10)
     else:
         admin_on.grid_remove()
         admin_off.grid()
