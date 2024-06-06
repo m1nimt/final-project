@@ -1,14 +1,100 @@
 from tkinter import * # type: ignore
 from tkinter import messagebox
 import random
-from tokenize import String
 
 root = Tk()
 
-admin_off=Frame(root)
-admin_off.config(bg="#FFFFFF")
+admin_off=Frame(root,bg="#FFFFFF")
+
+
+admin_on=Frame(root,bg="#FFFFFF")
+
 
 #functions
+def admin_mode_toggle(ignore):
+    global valid_coupons,coupon_listbox,coupon_list,new_code,no_number
+    if admin.get() == 1:
+       
+        #label
+        no_number = Label(admin_on,text='You must include a number, this will be your coupon value. Numbers will be read left to right and can be anything above 0, and under 100.',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
+
+        #list
+        coupon_list = StringVar()
+        coupon_list.set(valid_coupons) # type: ignore
+        coupon_listbox = Listbox(admin_on, listvariable=coupon_list,selectmode=SINGLE, font=('Gill Sans',15),bg='#FFFFFF',fg='#000000')
+        
+        #buttons
+        delete_allButton = Button(admin_on,text='Delete All',font=('Gill Sans',10),bg="#FFFFFF",command=delete_all_coupons,bd=0,highlightthickness=0)
+        delete_singleButton = Button(admin_on,text='Delete Single',font=('Gill Sans',10),bg="#FFFFFF",command=delete_single_coupon,bd=0,highlightthickness=0)
+        
+        add_button = Button(admin_on,text='Add',font=('Gill Sans',10),bg="#FFFFFF",command=add_coupon,bd=0,highlightthickness=0)
+        
+        
+        #entry
+        new_code = StringVar()
+        new_codeEntry=Entry(admin_on,textvariable=new_code,width=10,fg='#000000',bg='#FFFFFF',bd=2)
+        
+        
+        #gridding
+        admin_off.grid_remove()
+        admin_on.grid()
+        adminScale2.grid(row=4,column=1)
+        coupon_listbox.grid(row=1,column=2,columnspan=2)
+        delete_allButton.grid(row=2,column=3)
+        delete_singleButton.grid(row=2,column=2)
+        new_codeEntry.grid(row=3,column=2,sitcky=E)
+        add_button.grid(row=3,column=3,sticky=W)
+    else:
+        admin_on.grid_remove()
+        admin_off.grid()
+
+
+
+
+
+
+
+
+
+
+
+########################
+def add_coupon():
+    x = new_code.get()
+    numbers = '123456789'
+    proper = False
+
+    for i in numbers:
+      if i in x:
+        proper = True
+        break
+    
+    if proper == False:
+        no_number.grid(row=4,column=2,columnspan=2)
+
+
+def delete_all_coupons():
+    global valid_coupons
+    valid_coupons.clear()
+    coupon_list.set(valid_coupons) # type: ignore
+
+def delete_single_coupon():
+    global valid_coupons
+    to_delete = coupon_listbox.curselection()[0]
+
+    if valid_coupons[to_delete] in current_coupon.get():   
+        already_appliedLabel.grid_remove()
+        bad_couponLabel.grid_remove()
+        new_subtotalLabel.grid_remove()
+        current_couponLabel.grid_remove()
+        current_coupon.set('')
+        subtotalPriceLabel.config(foreground='#000000')
+
+    valid_coupons.pop(to_delete)
+    coupon_list.set(valid_coupons) # type: ignore
+    
+
+
 def remove_text(ignore):
     code.set('')
     codeEntry.config(fg='#000000')
@@ -32,7 +118,7 @@ def quantity_1():
     price = price1_value.get()
     quantity = spin1.get()
     price1.set(f'${price*quantity}')
-    subtotalPrice.set(f'${(float(price1.get().replace('$',''))) + (float(price2.get().replace('$','')))}')
+    subtotalPrice.set(f'${(int(price1.get().replace('$',''))) + (int(price2.get().replace('$','')))}')
 
 
 def quantity_2():
@@ -45,35 +131,45 @@ def quantity_2():
 
 def coupon_apply():
     global valid_coupons,already_applied,user_code
+
     #valid coupons is a list of coupons
     user_code = code.get()
-    #users inputed coupon
 
-    if user_code ==' ' or user_code == '' or user_code == 'Enter here':
+    #users inputed coupon
+    if user_code == ' ' or user_code == '' or user_code == 'Enter here':
+
         already_appliedLabel.grid_remove()
         bad_couponLabel.grid_remove()
+
     
     elif user_code.lower() == 'clear':
+
         already_appliedLabel.grid_remove()
         bad_couponLabel.grid_remove()
         new_subtotalLabel.grid_remove()
         current_couponLabel.grid_remove()
+        current_coupon.set('')
         subtotalPriceLabel.config(foreground='#000000')
 
 
     elif user_code not in valid_coupons:
+
         already_applied = user_code
         already_appliedLabel.grid_remove()
+        current_couponLabel.grid_remove()
         bad_couponLabel.grid()
         
+            
 
-    elif user_code == already_applied:
+    elif user_code == already_applied or user_code in current_coupon.get():
+
         already_applied = user_code
         bad_couponLabel.grid_remove()
         current_couponLabel.grid_remove()
         already_appliedLabel.grid()
 
     else:
+
         already_appliedLabel.grid_remove()
         already_applied = user_code
         bad_couponLabel.grid_remove()
@@ -98,8 +194,8 @@ def coupon_apply():
         current_couponLabel.grid()
 
 #FRAMES
-product1Frame=LabelFrame(admin_off,text='Suitcase - Blue',background='#FFFFFF',foreground='#000000',font=('Gill Sans Bold', 15))
-product2Frame=LabelFrame(admin_off,text='Lorem ipsum',background='#FFFFFF',foreground='#000000',font=('Gill Sans Bold', 15))
+product1Frame=LabelFrame(admin_off,text='',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
+product2Frame=LabelFrame(admin_off,text='',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
 
 #WHITESPACE
 whitespace1=Label(product1Frame,bg='#FFFFFF')
@@ -109,20 +205,37 @@ whitespace4=Label(product2Frame,bg='#FFFFFF')
 
 
 #BUTTONS
-atibaStoreButton = Button(admin_off,text='Atiba Store',font=('Gill Sans Bold',20),bg="#FFFFFF",activebackground='#FFFFFF',relief=FLAT,command=atiba_store)
+atibaStoreButton = Button(admin_off,text='Atiba Store',font=('Gill Sans',20),bg="#FFFFFF",activebackground='#FFFFFF',relief=FLAT,command=atiba_store)
 
-applyButton = Button(admin_off,text='Apply',font=('Gill Sans Bold',20),bg="#e39700",activebackground='#8c5e00',relief=RAISED,command=coupon_apply)
+applyButton = Button(admin_off,text='Apply',font=('Gill Sans',20),bg="#e39700",activebackground='#8c5e00',relief=RAISED,command=coupon_apply)
 
 #SCALES
 admin = IntVar()
-adminScale = Scale(admin_off, from_=1, to=2, variable = admin, width = 20, length=50, orient=VERTICAL,bd=0,bg='#FFFFFF',fg='#000000',label='Admin Mode',font=('Gill Sans Bold',10),highlightthickness=0)
+admin.set(0)
+adminScale = Scale(admin_off, from_=1, to=0, variable = admin, width = 20, length=50, orient=VERTICAL,bd=0,bg='#FFFFFF',fg='#000000',label='Admin Mode',font=('Gill Sans',10),highlightthickness=0,command=admin_mode_toggle)
+
+adminScale2 = Scale(admin_on, from_=1, to=0, variable = admin, width = 20, length=50, orient=VERTICAL,bd=0,bg='#FFFFFF',fg='#000000',label='Admin Mode',font=('Gill Sans',10),highlightthickness=0,command=admin_mode_toggle)
 
 #IMAGES
-suitcase = PhotoImage(file='images/suitcase.png')
-suitcaseLabel = Label(product1Frame,image=suitcase,bd=0)
+wallet = PhotoImage(file='images/wallet.png')
+walletLabel1 = Label(product1Frame,image=wallet,bd=0,bg='#FFFFFF')
+walletLabel2 = Label(product2Frame,image=wallet,bd=0,bg='#FFFFFF')
 
-table = PhotoImage(file='images/table.png')
-tableLabel = Label(product2Frame,image=table,bd=0)
+speaker = PhotoImage(file='images/speaker.png')
+speakerLabel1 = Label(product1Frame,image=speaker,bd=0,bg='#FFFFFF')
+speakerLabel2 = Label(product2Frame,image=speaker,bd=0,bg='#FFFFFF')
+
+yoga = PhotoImage(file='images/yoga.png')
+yogaLabel1 = Label(product1Frame,image=yoga,bd=0,bg='#FFFFFF')
+yogaLabel2 = Label(product2Frame,image=yoga,bd=0,bg='#FFFFFF')
+
+remote = PhotoImage(file='images/remote.png')
+remoteLabel1 = Label(product1Frame,image=remote,bd=0,bg='#FFFFFF')
+remoteLabel2 = Label(product2Frame,image=remote,bd=0,bg='#FFFFFF')
+
+blender = PhotoImage(file='images/blender.png')
+blenderLabel1 = Label(product1Frame,image=blender,bd=0,bg='#FFFFFF')
+blenderLabel2 = Label(product2Frame,image=blender,bd=0,bg='#FFFFFF')
 
 #SPINBOX
 spin1 = IntVar()
@@ -154,46 +267,46 @@ already_applied = ''
 coupon_entered = ''
 
 #LABELS
-cartLabel = Label(admin_off,text='Your Cart',font=('Gill Sans Bold',30),background='#FFFFFF',foreground='#000000')
+cartLabel = Label(admin_off,text='Your Cart',font=('Gill Sans',30),background='#FFFFFF',foreground='#000000')
 
-quantityLabel = Label(admin_off,text='QUANTITY',font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#8f8f8f')
-totalLabel = Label(admin_off,text='TOTAL',font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#8f8f8f')
+quantityLabel = Label(admin_off,text='QUANTITY',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
+totalLabel = Label(admin_off,text='TOTAL',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
 
 price1 = StringVar()
 price1_value = IntVar()
-price1_value.set(random.randint(19,119))
+price1_value.set(random.randint(20,120))
 price1.set(f'${price1_value.get()}')
-price1Label = Label(product1Frame,textvariable=price1,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#000000',width=4)
+price1Label = Label(product1Frame,textvariable=price1,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000',width=4)
 
 price2 = StringVar()
 price2_value = IntVar()
-price2_value.set(random.randint(19,119))
-price2.set(f'${price1_value.get()}')
-price2Label = Label(product2Frame,textvariable=price2,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#000000',width=4)
+price2_value.set(random.randint(20,120))
+price2.set(f'${price2_value.get()}')
+price2Label = Label(product2Frame,textvariable=price2,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000',width=4)
 
-discountLabel = Label(admin_off,text='COUPON',font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#8f8f8f')
+discountLabel = Label(admin_off,text='COUPON',font=('Gill Sans',15),background='#FFFFFF',foreground='#8f8f8f')
 
 out_of1Text = StringVar()
-out_of1Label=Label(product1Frame,textvariable=out_of1Text,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#fc0000')
+out_of1Label=Label(product1Frame,textvariable=out_of1Text,font=('Gill Sans',15),background='#FFFFFF',foreground='#fc0000')
 
 out_of2Text = StringVar()
-out_of1Label=Label(product2Frame,textvariable=out_of2Text,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#fc0000')
+out_of1Label=Label(product2Frame,textvariable=out_of2Text,font=('Gill Sans',15),background='#FFFFFF',foreground='#fc0000')
 
-subtotalLabel = Label(admin_off,text='SUBTOTAL',font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#000000')
+subtotalLabel = Label(admin_off,text='SUBTOTAL',font=('Gill Sans',15),background='#FFFFFF',foreground='#000000')
 
 subtotalPrice = StringVar()
 subtotalPrice.set(f'${(int(price1.get().replace('$',''))) + (int(price2.get().replace('$','')))}')
-subtotalPriceLabel=Label(admin_off,textvariable=subtotalPrice,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#000000')
+subtotalPriceLabel=Label(admin_off,textvariable=subtotalPrice,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000')
 
 #errors with coupons - still Labels
-already_appliedLabel = Label(admin_off,text='You already entered this code!',font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#ff0000')
-bad_couponLabel = Label(admin_off,text="This code doesn't exist.",font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#ff0000')
+already_appliedLabel = Label(admin_off,text='You already entered this code!',font=('Gill Sans',10),background='#FFFFFF',foreground='#ff0000')
+bad_couponLabel = Label(admin_off,text="This code doesn't exist.",font=('Gill Sans',10),background='#FFFFFF',foreground='#ff0000')
 
 current_coupon = StringVar()
-current_couponLabel = Label(admin_off,textvariable=current_coupon,font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#0d8500')
+current_couponLabel = Label(admin_off,textvariable=current_coupon,font=('Gill Sans',10),background='#FFFFFF',foreground='#0d8500')
 
 new_subtotal=StringVar()
-new_subtotalLabel = Label(admin_off,textvariable=new_subtotal,bg='#FFFFFF',font=('Gill Sans Bold',15),fg='#0d8500')
+new_subtotalLabel = Label(admin_off,textvariable=new_subtotal,bg='#FFFFFF',font=('Gill Sans',15),fg='#0d8500')
 
 
 #GRIDDING
@@ -209,16 +322,52 @@ product2Frame.grid(row=5,column=1,columnspan=4,sticky=W,padx=5)
 
 #products
 #...
-suitcaseLabel.grid(column=1,row=1,columnspan=2,sticky=W)
+image_choice1 = random.randint(1,5)
+
+if image_choice1== 1:
+    walletLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+    product1Frame.config(text='Wallet')
+elif image_choice1 == 2:
+    speakerLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+    product1Frame.config(text='Speaker')
+elif image_choice1 == 3:
+    yogaLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+    product1Frame.config(text='Yoga Mat')
+elif image_choice1 == 4:
+    remoteLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+    product1Frame.config(text='Remote')
+elif image_choice1 == 5:
+    blenderLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+    product1Frame.config(text='Blender')
+
 prod1spin.grid(column=3,row=1)
 whitespace1.grid(column=2,row=1,padx=125)
 whitespace2.grid(column=4,row=1,padx=35)
 price1Label.grid(column=5,row=1,padx=10,ipadx=5)
 
-tableLabel.grid(column=1,row=1,columnspan=2,sticky=W)
+while True:
+    image_choice2 = random.randint(1,5)
+    if image_choice2 != image_choice1: break
+
+if image_choice2== 1:
+    walletLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+    product2Frame.config(text='Wallet')
+elif image_choice2 == 2:
+    speakerLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+    product2Frame.config(text='Speaker')
+elif image_choice2 == 3:
+    yogaLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+    product2Frame.config(text='Yoga Mat')
+elif image_choice2 == 4:
+    remoteLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+    product2Frame.config(text='Remote')
+elif image_choice2 == 5:
+    blenderLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+    product2Frame.config(text='Blender')
+
 prod2spin.grid(column=3,row=1)
-whitespace3.grid(column=2,row=1,padx=100)
-whitespace4.grid(column=4,row=1,padx=40)
+whitespace3.grid(column=2,row=1,padx=125)
+whitespace4.grid(column=4,row=1,padx=35)
 price2Label.grid(column=5,row=1,padx=10,ipadx=5)
 #'''
 
