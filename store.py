@@ -98,8 +98,8 @@ def coupon_apply():
         current_couponLabel.grid()
 
 #FRAMES
-product1Frame=LabelFrame(admin_off,text='Suitcase - Blue',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
-product2Frame=LabelFrame(admin_off,text='Lorem ipsum',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
+product1Frame=LabelFrame(admin_off,text='Suitcase - Blue',background='#FFFFFF',foreground='#000000',font=('Gill Sans Bold', 15))
+product2Frame=LabelFrame(admin_off,text='Lorem ipsum',background='#FFFFFF',foreground='#000000',font=('Gill Sans Bold', 15))
 
 #WHITESPACE
 whitespace1=Label(product1Frame,bg='#FFFFFF')
@@ -109,13 +109,13 @@ whitespace4=Label(product2Frame,bg='#FFFFFF')
 
 
 #BUTTONS
-atibaStoreButton = Button(admin_off,text='Atiba Store',font=('Gill Sans',20),bg="#FFFFFF",activebackground='#FFFFFF',relief=FLAT,command=atiba_store)
+atibaStoreButton = Button(admin_off,text='Atiba Store',font=('Gill Sans Bold',20),bg="#FFFFFF",activebackground='#FFFFFF',relief=FLAT,command=atiba_store)
 
-applyButton = Button(admin_off,text='Apply',font=('Gill Sans',20),bg="#e39700",activebackground='#8c5e00',relief=RAISED,command=coupon_apply)
+applyButton = Button(admin_off,text='Apply',font=('Gill Sans Bold',20),bg="#e39700",activebackground='#8c5e00',relief=RAISED,command=coupon_apply)
 
 #SCALES
 admin = IntVar()
-adminScale = Scale(admin_off, from_=1, to=2, variable = admin, width = 20, length=50, orient=VERTICAL,bd=0,bg='#FFFFFF',fg='#000000',label='Admin Mode',font=('Gill Sans',10))
+adminScale = Scale(admin_off, from_=1, to=2, variable = admin, width = 20, length=50, orient=VERTICAL,bd=0,bg='#FFFFFF',fg='#000000',label='Admin Mode',font=('Gill Sans Bold',10),highlightthickness=0)
 
 #IMAGES
 suitcase = PhotoImage(file='images/suitcase.png')
@@ -154,46 +154,46 @@ already_applied = ''
 coupon_entered = ''
 
 #LABELS
-cartLabel = Label(admin_off,text='Your Cart',font=('Gill Sans',30),background='#FFFFFF',foreground='#000000')
+cartLabel = Label(admin_off,text='Your Cart',font=('Gill Sans Bold',30),background='#FFFFFF',foreground='#000000')
 
-quantityLabel = Label(admin_off,text='QUANTITY',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
-totalLabel = Label(admin_off,text='TOTAL',font=('Gill Sans',10),background='#FFFFFF',foreground='#8f8f8f')
+quantityLabel = Label(admin_off,text='QUANTITY',font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#8f8f8f')
+totalLabel = Label(admin_off,text='TOTAL',font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#8f8f8f')
 
 price1 = StringVar()
 price1_value = IntVar()
 price1_value.set(random.randint(19,119))
 price1.set(f'${price1_value.get()}')
-price1Label = Label(product1Frame,textvariable=price1,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000',width=4)
+price1Label = Label(product1Frame,textvariable=price1,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#000000',width=4)
 
 price2 = StringVar()
 price2_value = IntVar()
 price2_value.set(random.randint(19,119))
 price2.set(f'${price1_value.get()}')
-price2Label = Label(product2Frame,textvariable=price2,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000',width=4)
+price2Label = Label(product2Frame,textvariable=price2,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#000000',width=4)
 
-discountLabel = Label(admin_off,text='COUPON',font=('Gill Sans',15),background='#FFFFFF',foreground='#8f8f8f')
+discountLabel = Label(admin_off,text='COUPON',font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#8f8f8f')
 
 out_of1Text = StringVar()
-out_of1Label=Label(product1Frame,textvariable=out_of1Text,font=('Gill Sans',15),background='#FFFFFF',foreground='#fc0000')
+out_of1Label=Label(product1Frame,textvariable=out_of1Text,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#fc0000')
 
 out_of2Text = StringVar()
-out_of1Label=Label(product2Frame,textvariable=out_of2Text,font=('Gill Sans',15),background='#FFFFFF',foreground='#fc0000')
+out_of1Label=Label(product2Frame,textvariable=out_of2Text,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#fc0000')
 
-subtotalLabel = Label(admin_off,text='SUBTOTAL',font=('Gill Sans',15),background='#FFFFFF',foreground='#000000')
+subtotalLabel = Label(admin_off,text='SUBTOTAL',font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#000000')
 
 subtotalPrice = StringVar()
 subtotalPrice.set(f'${(int(price1.get().replace('$',''))) + (int(price2.get().replace('$','')))}')
-subtotalPriceLabel=Label(admin_off,textvariable=subtotalPrice,font=('Gill Sans',15),background='#FFFFFF',foreground='#000000')
+subtotalPriceLabel=Label(admin_off,textvariable=subtotalPrice,font=('Gill Sans Bold',15),background='#FFFFFF',foreground='#000000')
 
 #errors with coupons - still Labels
-already_appliedLabel = Label(admin_off,text='You already entered this code!',font=('Gill Sans',10),background='#FFFFFF',foreground='#ff0000')
-bad_couponLabel = Label(admin_off,text="This code doesn't exist.",font=('Gill Sans',10),background='#FFFFFF',foreground='#ff0000')
+already_appliedLabel = Label(admin_off,text='You already entered this code!',font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#ff0000')
+bad_couponLabel = Label(admin_off,text="This code doesn't exist.",font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#ff0000')
 
 current_coupon = StringVar()
-current_couponLabel = Label(admin_off,textvariable=current_coupon,font=('Gill Sans',10),background='#FFFFFF',foreground='#0d8500')
+current_couponLabel = Label(admin_off,textvariable=current_coupon,font=('Gill Sans Bold',10),background='#FFFFFF',foreground='#0d8500')
 
 new_subtotal=StringVar()
-new_subtotalLabel = Label(admin_off,textvariable=new_subtotal,bg='#FFFFFF',font=('Gill Sans',15),fg='#0d8500')
+new_subtotalLabel = Label(admin_off,textvariable=new_subtotal,bg='#FFFFFF',font=('Gill Sans Bold',15),fg='#0d8500')
 
 
 #GRIDDING
