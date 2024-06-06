@@ -221,7 +221,7 @@ def add_coupon():
         break
     
     if proper == False:
-        no_number.grid(row=4,column=2,columnspan=2)
+        no_number.grid(row=5,column=2,columnspan=2)
     else:
         valid_coupons.append(coupon)
         coupon_list.set(valid_coupons) # type: ignore
