@@ -12,16 +12,26 @@ admin_on=Frame(root,bg="#FFFFFF")
 
 #functions
 def admin_mode_toggle(ignore):
-    global valid_coupons,coupon_listbox,coupon_list,new_code,no_number
+    global valid_coupons,coupon_listbox,coupon_list,new_code,no_number,current_image,current_image2,price_config_1,price_config_2
     if admin.get() == 1:
-       
-        #label
-        no_number = Label(admin_on,text='You must include a number,\nthis will be your coupon value.\nNumbers will be read left to right and\ncan be anything above 0, and under 100.',font=('Gill Sans',10),background='#FFFFFF',foreground='#ff0000')
-
         #frames
         product1_configFrame = LabelFrame(admin_on,text='Product 1',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
         product2_configFrame = LabelFrame(admin_on,text='Product 2',background='#FFFFFF',foreground='#000000',font=('Gill Sans', 15))
 
+
+        #spinbox
+        price_config_1 = IntVar()
+        price_config_1.set(price1_value.get())
+        price_config_1Label = Spinbox(product1_configFrame, width=3, textvariable=price_config_1, from_=1, to=120,background='#FFFFFF',highlightbackground='#FFFFFF',foreground='#000000',command=change_price1)
+
+        price_config_2 = IntVar()
+        price_config_2.set(price2_value.get())
+        price_config_2Label = Spinbox(product2_configFrame, width=3, textvariable=price_config_2, from_=1, to=120,background='#FFFFFF',highlightbackground='#FFFFFF',foreground='#000000',command=change_price2)
+
+        #label
+        no_number = Label(admin_on,text='You must include a number,\nthis will be your coupon value.\nNumbers will be read left to right and\ncan be anything above 0, and under 100.',font=('Gill Sans',10),background='#FFFFFF',foreground='#ff0000')
+
+      
         #list
         coupon_list = StringVar()
         coupon_list.set(valid_coupons) # type: ignore
@@ -34,11 +44,15 @@ def admin_mode_toggle(ignore):
 
         current_image = StringVar()
         current_image.set(images[image_choice1-1])
-        current_imageOptionMenu=OptionMenu(product1_configFrame,current_image,*images)
+        current_imageOptionMenu=OptionMenu(product1_configFrame,current_image,*images,command=set_image)
+        current_imageOptionMenu.config(width=5,bd=0,bg='#FFFFFF',fg='#000000',activeforeground='#000000')
+
+
 
         current_image2 = StringVar()
         current_image2.set(images[image_choice2-1])
-        current_imageOptionMenu2=OptionMenu(product2_configFrame,current_image2,*images)
+        current_imageOptionMenu2=OptionMenu(product2_configFrame,current_image2,*images,command=set_image2)
+        current_imageOptionMenu2.config(width=5,bd=0,bg='#FFFFFF',fg='#000000',activeforeground='#000000')
         #buttons
         delete_allButton = Button(admin_on,text='Delete All',font=('Gill Sans',10),bg="#FFFFFF",command=delete_all_coupons,bd=0,highlightthickness=0)
         delete_singleButton = Button(admin_on,text='Delete Single',font=('Gill Sans',10),bg="#FFFFFF",command=delete_single_coupon,bd=0,highlightthickness=0)
@@ -62,10 +76,14 @@ def admin_mode_toggle(ignore):
         add_button.grid(row=4,column=3,sticky=EW)
 
         product1_configFrame.grid(row=1,column=1,padx=10)
-        current_imageOptionMenu.grid(row=1,column=1,ipadx=40,ipady=10)
+        current_imageOptionMenu.grid(row=1,column=1)
 
         product2_configFrame.grid(row=2,column=1,padx=20)
-        current_imageOptionMenu2.grid(row=1,column=1,ipadx=40,ipady=10)
+        current_imageOptionMenu2.grid(row=1,column=1)
+        
+        price_config_1Label.grid(row=2,column=1)
+        price_config_2Label.grid(row=2,column=1)
+
     else:
         admin_on.grid_remove()
         admin_off.grid()
@@ -81,6 +99,116 @@ def admin_mode_toggle(ignore):
 
 
 ########################
+
+def change_price1():
+
+    price1_value.set(price_config_1.get())
+
+    spin1.set(1)
+    code.set('clear')
+    coupon_apply()
+
+    quantity_1()
+
+def change_price2():
+
+    price2_value.set(price_config_2.get())
+
+    spin2.set(1)
+    code.set('clear')
+    coupon_apply()
+
+    quantity_2()
+
+def set_image(ignore):
+    x = current_image.get()
+    if x == 'Remote':
+        remoteLabel1.grid()
+        blenderLabel1.grid_remove()
+        speakerLabel1.grid_remove()
+        walletLabel1.grid_remove()
+        yogaLabel1.grid_remove()
+
+        product1Frame.config(text='Remote')
+
+    elif x == 'Wallet':
+        remoteLabel1.grid_remove()
+        blenderLabel1.grid_remove()
+        speakerLabel1.grid_remove()
+        walletLabel1.grid()
+        yogaLabel1.grid_remove()
+
+        product1Frame.config(text='Wallet')
+    elif x == 'Blender':
+        remoteLabel1.grid_remove()
+        blenderLabel1.grid()
+        speakerLabel1.grid_remove()
+        walletLabel1.grid_remove()
+        yogaLabel1.grid_remove()
+
+        product1Frame.config(text='Blender')
+    elif x == 'Speaker':
+        remoteLabel1.grid_remove()
+        blenderLabel1.grid_remove()
+        speakerLabel1.grid()
+        walletLabel1.grid_remove()
+        yogaLabel1.grid_remove()
+
+        product1Frame.config(text='Speaker')
+    elif x == 'Yoga Mat':
+        remoteLabel1.grid_remove()
+        blenderLabel1.grid_remove()
+        speakerLabel1.grid_remove()
+        walletLabel1.grid_remove()
+        yogaLabel1.grid()
+
+        product1Frame.config(text='Yoga Mat')
+
+    
+def set_image2(ignore):
+    y = current_image2.get()
+    if y == 'Remote':
+        remoteLabel2.grid()
+        blenderLabel2.grid_remove()
+        speakerLabel2.grid_remove()
+        walletLabel2.grid_remove()
+        yogaLabel2.grid_remove()
+
+        product2Frame.config(text='Remote')
+
+    elif y == 'Wallet':
+        remoteLabel2.grid_remove()
+        blenderLabel2.grid_remove()
+        speakerLabel2.grid_remove()
+        walletLabel2.grid()
+        yogaLabel2.grid_remove()
+
+        product2Frame.config(text='Wallet')
+    elif y == 'Blender':
+        remoteLabel2.grid_remove()
+        blenderLabel2.grid()
+        speakerLabel2.grid_remove()
+        walletLabel2.grid_remove()
+        yogaLabel2.grid_remove()
+
+        product2Frame.config(text='Blender')
+    elif y == 'Speaker':
+        remoteLabel2.grid_remove()
+        blenderLabel2.grid_remove()
+        speakerLabel2.grid()
+        walletLabel2.grid_remove()
+        yogaLabel2.grid_remove()
+
+        product2Frame.config(text='Speaker')
+    elif y == 'Yoga Mat':
+        remoteLabel2.grid_remove()
+        blenderLabel2.grid_remove()
+        speakerLabel2.grid_remove()
+        walletLabel2.grid_remove()
+        yogaLabel2.grid()
+
+        product2Frame.config(text='Yoga Mat')
+
 def add_coupon():
     global valid_coupons
     coupon = new_code.get()
@@ -146,14 +274,36 @@ def quantity_1():
     quantity = spin1.get()
     price1.set(f'${price*quantity}')
     subtotalPrice.set(f'${(int(price1.get().replace('$',''))) + (int(price2.get().replace('$','')))}')
+    
+    value_of_coupon = ''
+    for number in user_code:
+        if number.isnumeric()==True:
+            value_of_coupon+=number
 
+    value_of_coupon = (100 - int(value_of_coupon)) / 100
+
+    subtotalPrice_float = float(subtotalPrice.get().replace('$',''))
+    
+    new_subtotal.set(f'${round(subtotalPrice_float*value_of_coupon)}')
+    new_subtotalLabel.grid()
 
 def quantity_2():
     price = price2_value.get()
     quantity = spin2.get()
     price2.set(f'${price*quantity}')
     subtotalPrice.set(f'${(int(price1.get().replace('$',''))) + (int(price2.get().replace('$','')))}')
+    
+    value_of_coupon = ''
+    for number in user_code:
+        if number.isnumeric()==True:
+            value_of_coupon+=number
 
+    value_of_coupon = (100 - int(value_of_coupon)) / 100
+    
+    subtotalPrice_float = float(subtotalPrice.get().replace('$',''))
+    
+    new_subtotal.set(f'${round(subtotalPrice_float*value_of_coupon)}')
+    new_subtotalLabel.grid()
 
 
 def coupon_apply():
@@ -167,15 +317,16 @@ def coupon_apply():
 
         already_appliedLabel.grid_remove()
         bad_couponLabel.grid_remove()
-
+        current_couponLabel.grid()
     
     elif user_code.lower() == 'clear':
 
         already_appliedLabel.grid_remove()
         bad_couponLabel.grid_remove()
         new_subtotalLabel.grid_remove()
-        current_couponLabel.grid_remove()
         current_coupon.set('')
+        already_applied = ''
+        new_subtotal.set('')
         subtotalPriceLabel.config(foreground='#000000')
 
 
@@ -204,9 +355,9 @@ def coupon_apply():
 
         value_of_coupon = ''
             
-        for letter in user_code:
-            if letter.isnumeric()==True:
-                value_of_coupon+=letter
+        for number in user_code:
+            if number.isnumeric()==True:
+                value_of_coupon+=number
 
         value_of_coupon = (100 - int(value_of_coupon)) / 100
         
@@ -346,6 +497,30 @@ product2Frame.grid(row=5,column=1,columnspan=4,sticky=W,padx=5)
 
 #products
 #...
+#images grid
+walletLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+speakerLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+yogaLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+remoteLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+blenderLabel1.grid(column=1,row=1,columnspan=2,sticky=W)
+remoteLabel1.grid_remove()
+blenderLabel1.grid_remove()
+speakerLabel1.grid_remove()
+walletLabel1.grid_remove()
+yogaLabel1.grid_remove()
+
+walletLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+speakerLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+yogaLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+remoteLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+blenderLabel2.grid(column=1,row=1,columnspan=2,sticky=W)
+remoteLabel2.grid_remove()
+blenderLabel2.grid_remove()
+speakerLabel2.grid_remove()
+walletLabel2.grid_remove()
+yogaLabel2.grid_remove()
+
+
 image_choice1 = random.randint(1,5)
 
 if image_choice1== 1:
@@ -411,9 +586,10 @@ bad_couponLabel.grid(column=3,row=8,columnspan=2,sticky=EW)
 bad_couponLabel.grid_remove()
 
 current_couponLabel.grid(column=3,row=8,columnspan=2,sticky=EW)
-current_couponLabel.grid_remove()
 
 new_subtotalLabel.grid(column=4,row=10)
 new_subtotalLabel.grid_remove()
+
+
 
 root.mainloop()
